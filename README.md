@@ -6,3 +6,4 @@
  |_____|_|_| |_|_|\_\___|\__,_| |_____|_|___/\__|___/
                                                      
 ```
+🎯[Assignment](https://www.theodinproject.com/lessons/javascript-linked-lists)
