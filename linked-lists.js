@@ -42,9 +42,16 @@ function linkedList () {
     }
 
     const pop = () => {
-        _tail = at(_size - 2)
-        _tail.updateNextNode(null)
+        if (_size <= 0) return
 
+        if (_size > 1) {
+            _tail = at(_size - 2)
+            _tail.updateNextNode(null)
+        } else {
+            _head = null
+            _tail = null
+        }
+        
         _size--
     }
 
@@ -66,7 +73,11 @@ function linkedList () {
     }
 
     const toString = () => {
-        console.log(nodeToString(_head))
+        if (_size > 0) {
+            console.log(nodeToString(_head))
+        } else {
+            console.log("null")
+        }
     }
 
     const nodeToString = (node) => {
@@ -91,16 +102,20 @@ function linkedList () {
     }
 
     const removeAt = (index) => {
+        if (_size <= 0) return
         if (index < 0 || index >= _size) throw Error("Index Out Of Bounds")
         
-        if (index > 0) {
-            const nodeToRemove = at(index)
-            at(index - 1).updateNextNode(nodeToRemove.next())
+        if (_size > 1) {
+            if (index === 0) {
+                _head = _head.next()
+            } else {
+                const nodeToRemove = at(index)
+                at(index - 1).updateNextNode(nodeToRemove.next())
+            }
+            _size--
         } else {
-            _head = _head.next()
-        }
-
-        _size--
+            pop()
+        }        
     }
 
     const size = () => _size
@@ -128,11 +143,3 @@ function node (val = null, nextNode = null) {
 
     return {value, next, updateValue, updateNextNode}  
 }
-
-const link = linkedList()
-link.append("9")
-link.prepend("7")
-link.prepend("3")
-link.removeAt(1)
-link.insertAt("10", 1)
-link.toString()
