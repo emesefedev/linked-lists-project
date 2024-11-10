@@ -28,7 +28,8 @@ function linkedList () {
     }
 
     const at = (index) => {
-        if (index <0 || index >= size) return "Error! Index out of bounds"
+        
+        if (index < 0 || index >= _size) throw Error("Index Out Of Bounds")
 
         let i = 0
         let node = _head
@@ -41,17 +42,27 @@ function linkedList () {
     }
 
     const pop = () => {
-
+        _tail = at(_size - 2)
+        _tail.updateNextNode(null)
 
         _size--
     }
 
-    const contains = (value) => {
+    const containsAt = (value) => {
+        for (let i = 0; i < _size; i++) {
+            if (at(i).value() === value) {
+                return {contains: true, at: i}
+            }
+        }
+        return {contains: false, at: -1}
+    }
 
+    const contains = (value) => {
+        return containsAt(value).contains
     }
 
     const find = (value) => {
-
+        return containsAt(value).at
     }
 
     const toString = () => {
@@ -65,11 +76,38 @@ function linkedList () {
         return `( ${node.value()} ) -> ${nodeToString(node.next())}`
     }
 
+    const insertAt = (value, index) => {
+        if (index < 0 || index >= _size) throw Error("Index Out Of Bounds")
+
+        if (index === 0) {
+            prepend(value)
+        } else {
+            const nodeAtIndex = at(index)
+            const newNode = node(value, nodeAtIndex)
+            at(index - 1).updateNextNode(newNode)
+            
+            _size++
+        }
+    }
+
+    const removeAt = (index) => {
+        if (index < 0 || index >= _size) throw Error("Index Out Of Bounds")
+        
+        if (index > 0) {
+            const nodeToRemove = at(index)
+            at(index - 1).updateNextNode(nodeToRemove.next())
+        } else {
+            _head = _head.next()
+        }
+
+        _size--
+    }
+
     const size = () => _size
     const head = () => _head
     const tail = () => _tail
 
-    return {toString, append, prepend, size, head, tail, at}
+    return {toString, append, prepend, size, head, tail, at, pop, contains, find, insertAt, removeAt}
 }
 
 function node (val = null, nextNode = null) {
@@ -95,5 +133,6 @@ const link = linkedList()
 link.append("9")
 link.prepend("7")
 link.prepend("3")
-console.log(link.at(3).value())
+link.removeAt(1)
+link.insertAt("10", 1)
 link.toString()
